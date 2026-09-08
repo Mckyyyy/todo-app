@@ -31,7 +31,7 @@ const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
                         onClick={() => completeTodo(todo.id)}
                         className={todo.isComplete ? "todo-text completed" : "todo-text"}
                     >
-                        {todo.isComplete ? "Done To Do List" : todo.text} {/* Keep the text as 'Done' when completed */}
+                        {todo.text}
                     </div>
                     <div className="icons">
                         <RiCloseCircleLine onClick={() => removeTodo(todo.id)} className="delete-icon" />
