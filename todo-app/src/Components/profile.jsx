@@ -3,7 +3,7 @@ const Profile = () => {
 		<section className="profile-card" aria-label="User profile">
 			<div className="profile-avatar" aria-hidden="true">AM</div>
 			<div className="profile-details">
-				<strong>Alex Morgan</strong>
+				<strong>Mcmc Reaembonanza</strong>
 				<span>Focused planner</span>
 			</div>
 			<button className="profile-menu" type="button" aria-label="Open profile menu">•••</button>
