@@ -3,6 +3,7 @@ import TodoForm from "./TodoForm";
 import Todo from "./Todo";
 import Modal from "./Modal"; // Import the Modal component
 import Clock from "./Clock"; // Import the Clock component
+import Profile from "./profile";
 
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
@@ -104,6 +105,7 @@ const TodoList = () => {
             </header>
             <div className="dashboard-grid">
                 <aside className="dashboard-sidebar">
+                    <Profile />
                     <Clock />
                     <div className="focus-note">
                         <span className="focus-dot" />

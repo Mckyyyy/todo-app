@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
 const TodoForm = ({ edit, onSubmit }) => {
     const [input, setInput] = useState(edit ? edit.value : "");
@@ -52,6 +53,14 @@ const TodoForm = ({ edit, onSubmit }) => {
             )}
         </form>
     );
+};
+
+TodoForm.propTypes = {
+    edit: PropTypes.shape({
+        id: PropTypes.number,
+        value: PropTypes.string,
+    }),
+    onSubmit: PropTypes.func.isRequired,
 };
 
 export default TodoForm;
