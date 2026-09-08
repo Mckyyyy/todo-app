@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import TodoForm from "./TodoForm";
 import Todo from "./Todo";
 import Modal from "./Modal"; // Import the Modal component
@@ -89,20 +89,60 @@ const TodoList = () => {
         setShowModal(false);
     };
 
+    const completedCount = todos.filter((todo) => todo.isComplete).length;
+    const remainingCount = todos.length - completedCount;
+    const progress = todos.length ? Math.round((completedCount / todos.length) * 100) : 0;
+
     return (
         <div className="todo-container">
-            <h2 className="todo-title">My To-Do List</h2> {/* Centered title outside the box */}
-            <div className="todo-app">
-                <Clock /> {/* Add the Clock component first */}
-                <h1>What's The Plan for Today?</h1>
+            <header className="dashboard-header">
+                <div>
+                    <p className="eyebrow">PERSONAL DASHBOARD</p>
+                    <h1>Good day, let&apos;s get things done.</h1>
+                </div>
+                <div className="header-mark" aria-hidden="true">TD</div>
+            </header>
+            <div className="dashboard-grid">
+                <aside className="dashboard-sidebar">
+                    <Clock />
+                    <div className="focus-note">
+                        <span className="focus-dot" />
+                        <div>
+                            <strong>Daily focus</strong>
+                            <p>Small steps make big progress.</p>
+                        </div>
+                    </div>
+                    <div className="progress-block">
+                        <div className="progress-label">
+                            <span>Today&apos;s progress</span>
+                            <strong>{progress}%</strong>
+                        </div>
+                        <div className="progress-track"><span style={{ width: `${progress}%` }} /></div>
+                    </div>
+                </aside>
+                <main className="todo-app">
+                    <div className="section-heading">
+                        <div>
+                            <p className="eyebrow">YOUR TASKS</p>
+                            <h2>My to-do list</h2>
+                        </div>
+                        <span className="task-count">{remainingCount} open</span>
+                    </div>
                 <TodoForm onSubmit={addTodo} />
+                <div className="stats-row">
+                    <div className="stat-card"><span className="stat-icon open-icon">○</span><div><strong>{remainingCount}</strong><small>Open tasks</small></div></div>
+                    <div className="stat-card"><span className="stat-icon done-icon">✓</span><div><strong>{completedCount}</strong><small>Completed</small></div></div>
+                    <div className="stat-card"><span className="stat-icon total-icon">#</span><div><strong>{todos.length}</strong><small>Total tasks</small></div></div>
+                </div>
                 <Todo
                     todos={todos}
                     completeTodo={completeTodo}
                     removeTodo={removeTodo}
                     updateTodo={updateTodo}
                 />
+                {todos.length === 0 && <div className="empty-state"><span>✦</span><p>Your list is clear.</p><small>Add a task above to get started.</small></div>}
                 {showModal && <Modal message={modalMessage} onClose={closeModal} />}
+                </main>
             </div>
         </div>
     );
