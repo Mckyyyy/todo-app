@@ -28,6 +28,7 @@ body { background: radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--the
 .profile-menu { background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: 15px; letter-spacing: 2px; padding: 4px; }.profile-menu:hover { color: var(--accent); }
 .dashboard-sidebar > div[style] { border-bottom: 1px solid var(--line); padding: 0 0 24px; }.dashboard-sidebar > div[style] span { color: var(--ink) !important; font-family: inherit !important; }.dashboard-sidebar > div[style] label { color: var(--muted) !important; font-family: inherit !important; }
 .theme-mode-toggle { align-items: center; background: transparent; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); cursor: pointer; display: flex; font: inherit; font-size: 12px; gap: 8px; justify-content: center; padding: 8px 10px; width: 100%; }.theme-mode-toggle:hover { border-color: var(--accent); color: var(--ink); }
+.language-switcher { align-items: center; border-bottom: 1px solid var(--line); color: var(--muted); display: flex; font-size: 12px; justify-content: space-between; padding: 0 0 24px; }.language-switcher select { background: var(--input-bg); border: 1px solid var(--line); border-radius: 7px; color: var(--ink); font: inherit; padding: 6px 8px; }
 .clock-container { align-items: flex-start; border-bottom: 1px solid var(--line); display: flex; padding: 4px 0 28px; }
 .time { color: var(--ink); font-size: 30px; font-weight: 700; letter-spacing: -0.05em; }
 .date { color: var(--muted); font-size: 13px; margin-top: 7px; }

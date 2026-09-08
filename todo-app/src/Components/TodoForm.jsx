@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
-const TodoForm = ({ edit, onSubmit }) => {
+const TodoForm = ({ edit, onSubmit, labels }) => {
     const [input, setInput] = useState(edit ? edit.value : "");
 
     const inputRef = useRef(null);
@@ -29,26 +29,26 @@ const TodoForm = ({ edit, onSubmit }) => {
             {edit ? ( 
                 <>  
                     <input 
-                        placeholder="Update Your Item" 
+                        placeholder={labels.updateTodo}
                         value={input} 
                         onChange={handleChange} 
                         name="text" 
                         ref={inputRef}
                         className="todo-input edit"
                     />
-                    <button type="submit" className="todo-button edit">Update</button>
+                    <button type="submit" className="todo-button edit">{labels.update}</button>
                 </>
             ) : (
                 <>
                     <input 
-                        placeholder="Add a todo" 
+                        placeholder={labels.addTodo}
                         value={input} 
                         onChange={handleChange} 
                         name="text" 
                         className="todo-input"
                         ref={inputRef}
                     />
-                    <button type="submit" className="todo-button">Add Todo</button>
+                    <button type="submit" className="todo-button">{labels.add}</button>
                 </>
             )}
         </form>
@@ -61,6 +61,12 @@ TodoForm.propTypes = {
         value: PropTypes.string,
     }),
     onSubmit: PropTypes.func.isRequired,
+    labels: PropTypes.shape({
+        updateTodo: PropTypes.string.isRequired,
+        update: PropTypes.string.isRequired,
+        addTodo: PropTypes.string.isRequired,
+        add: PropTypes.string.isRequired,
+    }).isRequired,
 };
 
 export default TodoForm;

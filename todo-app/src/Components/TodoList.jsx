@@ -6,8 +6,11 @@ import Clock from "./Clock"; // Import the Clock component
 import Profile from "./profile";
 import TaskToolbar from "./TaskToolbar";
 import { ColorPicker } from "./ColorThemeProvider";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "../context/Language";
 
 const TodoList = () => {
+    const { text } = useLanguage();
     const [todos, setTodos] = useState(() => {
         try {
             const savedTodos = localStorage.getItem("todo-dashboard-tasks");
@@ -121,8 +124,8 @@ const TodoList = () => {
         <div className="todo-container">
             <header className="dashboard-header">
                 <div>
-                    <p className="eyebrow">PERSONAL DASHBOARD</p>
-                    <h1>Good day, let&apos;s get things done.</h1>
+                    <p className="eyebrow">{text.dashboard}</p>
+                    <h1>{text.greeting}</h1>
                 </div>
                 <div className="header-mark" aria-hidden="true">TD</div>
             </header>
@@ -130,17 +133,18 @@ const TodoList = () => {
                 <aside className="dashboard-sidebar">
                     <Profile />
                     <ColorPicker />
+                    <LanguageSwitcher />
                     <Clock />
                     <div className="focus-note">
                         <span className="focus-dot" />
                         <div>
-                            <strong>Daily focus</strong>
-                            <p>Small steps make big progress.</p>
+                            <strong>{text.dailyFocus}</strong>
+                            <p>{text.focusMessage}</p>
                         </div>
                     </div>
                     <div className="progress-block">
                         <div className="progress-label">
-                            <span>Today&apos;s progress</span>
+                            <span>{text.todaysProgress}</span>
                             <strong>{progress}%</strong>
                         </div>
                         <div className="progress-track"><span style={{ width: `${progress}%` }} /></div>
@@ -149,27 +153,28 @@ const TodoList = () => {
                 <main className="todo-app">
                     <div className="section-heading">
                         <div>
-                            <p className="eyebrow">YOUR TASKS</p>
-                            <h2>My to-do list</h2>
+                            <p className="eyebrow">{text.yourTasks}</p>
+                            <h2>{text.todoList}</h2>
                         </div>
-                        <span className="task-count">{remainingCount} open</span>
+                        <span className="task-count">{remainingCount} {text.open}</span>
                     </div>
-                <TodoForm onSubmit={addTodo} />
+                <TodoForm onSubmit={addTodo} labels={text} />
                     <TaskToolbar
                         filter={filter}
                         onFilterChange={setFilter}
                         onClearCompleted={clearCompleted}
                         completedCount={completedCount}
+                        labels={text}
                     />
                 <div className="stats-row">
                     <button className={filter === "open" ? "stat-card stat-card-active" : "stat-card"} type="button" onClick={() => setFilter("open")} aria-pressed={filter === "open"}>
-                        <span className="stat-icon open-icon">○</span><span><strong>{remainingCount}</strong><small>Open tasks</small></span>
+                        <span className="stat-icon open-icon">○</span><span><strong>{remainingCount}</strong><small>{text.openTasks}</small></span>
                     </button>
                     <button className={filter === "completed" ? "stat-card stat-card-active" : "stat-card"} type="button" onClick={() => setFilter("completed")} aria-pressed={filter === "completed"}>
-                        <span className="stat-icon done-icon">✓</span><span><strong>{completedCount}</strong><small>Completed</small></span>
+                        <span className="stat-icon done-icon">✓</span><span><strong>{completedCount}</strong><small>{text.completed}</small></span>
                     </button>
                     <button className={filter === "all" ? "stat-card stat-card-active" : "stat-card"} type="button" onClick={() => setFilter("all")} aria-pressed={filter === "all"}>
-                        <span className="stat-icon total-icon">#</span><span><strong>{todos.length}</strong><small>Total tasks</small></span>
+                        <span className="stat-icon total-icon">#</span><span><strong>{todos.length}</strong><small>{text.totalTasks}</small></span>
                     </button>
                 </div>
                 <Todo
@@ -178,7 +183,7 @@ const TodoList = () => {
                     removeTodo={removeTodo}
                     updateTodo={updateTodo}
                 />
-                {visibleTodos.length === 0 && <div className="empty-state"><span>✦</span><p>{todos.length === 0 ? "Your list is clear." : "Nothing here yet."}</p><small>{todos.length === 0 ? "Add a task above to get started." : "Try another filter to see more tasks."}</small></div>}
+                {visibleTodos.length === 0 && <div className="empty-state"><span>✦</span><p>{todos.length === 0 ? text.listClear : text.nothingHere}</p><small>{todos.length === 0 ? text.addTask : text.tryFilter}</small></div>}
                 {showModal && <Modal message={modalMessage} onClose={closeModal} />}
                 </main>
             </div>
