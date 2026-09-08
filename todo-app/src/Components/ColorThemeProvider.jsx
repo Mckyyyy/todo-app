@@ -48,6 +48,7 @@ import { ColorThemeContext, useColorTheme } from "../context/ColorThemeContext";
 */
 
 const STORAGE_KEY = "dashboard-theme-color";
+const MODE_STORAGE_KEY = "dashboard-dark-mode";
 const DEFAULT_COLOR = "#3b82f6";
 
 export function ColorThemeProvider({ children, defaultColor = DEFAULT_COLOR }) {
@@ -55,18 +56,24 @@ export function ColorThemeProvider({ children, defaultColor = DEFAULT_COLOR }) {
     if (typeof window === "undefined") return defaultColor;
     return window.localStorage.getItem(STORAGE_KEY) || defaultColor;
   });
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.localStorage.getItem(MODE_STORAGE_KEY) !== "false";
+  });
 
   useEffect(() => {
     document.documentElement.style.setProperty("--theme-color", color);
+    document.documentElement.dataset.theme = isDark ? "dark" : "light";
     try {
       window.localStorage.setItem(STORAGE_KEY, color);
+      window.localStorage.setItem(MODE_STORAGE_KEY, String(isDark));
     } catch {
       // localStorage unavailable, safe to ignore
     }
-  }, [color]);
+  }, [color, isDark]);
 
   return (
-    <ColorThemeContext.Provider value={{ color, setColor }}>
+    <ColorThemeContext.Provider value={{ color, setColor, isDark, setIsDark, toggleDarkMode: () => setIsDark((current) => !current) }}>
       {children}
     </ColorThemeContext.Provider>
   );
@@ -89,7 +96,7 @@ const PRESET_COLORS = [
 ];
 
 export function ColorPicker() {
-  const { color, setColor } = useColorTheme();
+  const { color, setColor, isDark, toggleDarkMode } = useColorTheme();
 
   return (
     <div style={styles.wrapper}>
@@ -124,6 +131,10 @@ export function ColorPicker() {
           style={styles.colorInput}
         />
       </label>
+      <button className="theme-mode-toggle" type="button" onClick={toggleDarkMode} aria-pressed={isDark}>
+        <span aria-hidden="true">{isDark ? "☀" : "☾"}</span>
+        {isDark ? "Light mode" : "Dark mode"}
+      </button>
     </div>
   );
 }
