@@ -5,6 +5,7 @@ import Modal from "./Modal"; // Import the Modal component
 import Clock from "./Clock"; // Import the Clock component
 import Profile from "./profile";
 import TaskToolbar from "./TaskToolbar";
+import { ColorPicker } from "./ColorThemeProvider";
 
 const TodoList = () => {
     const [todos, setTodos] = useState(() => {
@@ -128,6 +129,7 @@ const TodoList = () => {
             <div className="dashboard-grid">
                 <aside className="dashboard-sidebar">
                     <Profile />
+                    <ColorPicker />
                     <Clock />
                     <div className="focus-note">
                         <span className="focus-dot" />

@@ -4,11 +4,11 @@
     --panel: #192421;
     --panel-soft: #202e2a;
     --line: rgba(214, 235, 226, 0.1);
-    --accent: #d5f36a;
+    --accent: var(--theme-color, #d5f36a);
 }
 
 * { box-sizing: border-box; }
-body { background: radial-gradient(circle at 8% 8%, #263d35 0, transparent 34%), #101817; color: var(--ink); }
+body { background: radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--theme-color, #d5f36a) 22%, transparent), transparent 34%), #101817; color: var(--ink); }
 .todo-container { width: min(1120px, calc(100% - 48px)); margin: 0 auto; padding: 52px 0; }
 .dashboard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; }
 .eyebrow { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: 0.16em; margin: 0 0 10px; }
@@ -21,6 +21,7 @@ body { background: radial-gradient(circle at 8% 8%, #263d35 0, transparent 34%),
 .profile-avatar { align-items: center; background: var(--accent); border-radius: 50%; color: #182018; display: flex; flex: 0 0 40px; font-size: 13px; font-weight: 900; height: 40px; justify-content: center; width: 40px; }
 .profile-details { display: flex; flex: 1; flex-direction: column; min-width: 0; }.profile-details strong { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.profile-details span { color: var(--muted); font-size: 11px; margin-top: 4px; }
 .profile-menu { background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: 15px; letter-spacing: 2px; padding: 4px; }.profile-menu:hover { color: var(--accent); }
+.dashboard-sidebar > div[style] { border-bottom: 1px solid var(--line); padding: 0 0 24px; }.dashboard-sidebar > div[style] span { color: var(--ink) !important; font-family: inherit !important; }.dashboard-sidebar > div[style] label { color: var(--muted) !important; font-family: inherit !important; }
 .clock-container { align-items: flex-start; border-bottom: 1px solid var(--line); display: flex; padding: 4px 0 28px; }
 .time { color: var(--ink); font-size: 30px; font-weight: 700; letter-spacing: -0.05em; }
 .date { color: var(--muted); font-size: 13px; margin-top: 7px; }
