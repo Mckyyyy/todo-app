@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TodoForm from "./TodoForm";
 import Todo from "./Todo";
 import Modal from "./Modal"; // Import the Modal component
 import Clock from "./Clock"; // Import the Clock component
 import Profile from "./profile";
+import TaskToolbar from "./TaskToolbar";
 
 const TodoList = () => {
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(() => {
+        try {
+            const savedTodos = localStorage.getItem("todo-dashboard-tasks");
+            return savedTodos ? JSON.parse(savedTodos) : [];
+        } catch {
+            return [];
+        }
+    });
+    const [filter, setFilter] = useState("all");
     const [modalMessage, setModalMessage] = useState(""); // State to store modal message
     const [showModal, setShowModal] = useState(false); // State to manage modal visibility
 
@@ -90,9 +99,22 @@ const TodoList = () => {
         setShowModal(false);
     };
 
+    useEffect(() => {
+        localStorage.setItem("todo-dashboard-tasks", JSON.stringify(todos));
+    }, [todos]);
+
+    const clearCompleted = () => {
+        setTodos((prev) => prev.filter((todo) => !todo.isComplete));
+    };
+
     const completedCount = todos.filter((todo) => todo.isComplete).length;
     const remainingCount = todos.length - completedCount;
     const progress = todos.length ? Math.round((completedCount / todos.length) * 100) : 0;
+    const visibleTodos = todos.filter((todo) => {
+        if (filter === "open") return !todo.isComplete;
+        if (filter === "completed") return todo.isComplete;
+        return true;
+    });
 
     return (
         <div className="todo-container">
@@ -131,18 +153,30 @@ const TodoList = () => {
                         <span className="task-count">{remainingCount} open</span>
                     </div>
                 <TodoForm onSubmit={addTodo} />
+                    <TaskToolbar
+                        filter={filter}
+                        onFilterChange={setFilter}
+                        onClearCompleted={clearCompleted}
+                        completedCount={completedCount}
+                    />
                 <div className="stats-row">
-                    <div className="stat-card"><span className="stat-icon open-icon">○</span><div><strong>{remainingCount}</strong><small>Open tasks</small></div></div>
-                    <div className="stat-card"><span className="stat-icon done-icon">✓</span><div><strong>{completedCount}</strong><small>Completed</small></div></div>
-                    <div className="stat-card"><span className="stat-icon total-icon">#</span><div><strong>{todos.length}</strong><small>Total tasks</small></div></div>
+                    <button className={filter === "open" ? "stat-card stat-card-active" : "stat-card"} type="button" onClick={() => setFilter("open")} aria-pressed={filter === "open"}>
+                        <span className="stat-icon open-icon">○</span><span><strong>{remainingCount}</strong><small>Open tasks</small></span>
+                    </button>
+                    <button className={filter === "completed" ? "stat-card stat-card-active" : "stat-card"} type="button" onClick={() => setFilter("completed")} aria-pressed={filter === "completed"}>
+                        <span className="stat-icon done-icon">✓</span><span><strong>{completedCount}</strong><small>Completed</small></span>
+                    </button>
+                    <button className={filter === "all" ? "stat-card stat-card-active" : "stat-card"} type="button" onClick={() => setFilter("all")} aria-pressed={filter === "all"}>
+                        <span className="stat-icon total-icon">#</span><span><strong>{todos.length}</strong><small>Total tasks</small></span>
+                    </button>
                 </div>
                 <Todo
-                    todos={todos}
+                    todos={visibleTodos}
                     completeTodo={completeTodo}
                     removeTodo={removeTodo}
                     updateTodo={updateTodo}
                 />
-                {todos.length === 0 && <div className="empty-state"><span>✦</span><p>Your list is clear.</p><small>Add a task above to get started.</small></div>}
+                {visibleTodos.length === 0 && <div className="empty-state"><span>✦</span><p>{todos.length === 0 ? "Your list is clear." : "Nothing here yet."}</p><small>{todos.length === 0 ? "Add a task above to get started." : "Try another filter to see more tasks."}</small></div>}
                 {showModal && <Modal message={modalMessage} onClose={closeModal} />}
                 </main>
             </div>
