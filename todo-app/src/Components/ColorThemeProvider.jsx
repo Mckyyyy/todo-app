@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { ColorThemeContext, useColorTheme } from "../context/ColorThemeContext";
 
 /*
   ColorThemeProvider.jsx
@@ -45,8 +47,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
   ---------------------------------------------------------------------------
 */
 
-const ColorThemeContext = createContext(null);
-
 const STORAGE_KEY = "dashboard-theme-color";
 const DEFAULT_COLOR = "#3b82f6";
 
@@ -60,7 +60,7 @@ export function ColorThemeProvider({ children, defaultColor = DEFAULT_COLOR }) {
     document.documentElement.style.setProperty("--theme-color", color);
     try {
       window.localStorage.setItem(STORAGE_KEY, color);
-    } catch (e) {
+    } catch {
       // localStorage unavailable, safe to ignore
     }
   }, [color]);
@@ -72,13 +72,10 @@ export function ColorThemeProvider({ children, defaultColor = DEFAULT_COLOR }) {
   );
 }
 
-export function useColorTheme() {
-  const ctx = useContext(ColorThemeContext);
-  if (!ctx) {
-    throw new Error("useColorTheme must be used inside a <ColorThemeProvider>");
-  }
-  return ctx;
-}
+ColorThemeProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+  defaultColor: PropTypes.string,
+};
 
 const PRESET_COLORS = [
   "#3b82f6", // blue
@@ -130,6 +127,8 @@ export function ColorPicker() {
     </div>
   );
 }
+
+ColorPicker.propTypes = {};
 
 const styles = {
   wrapper: {
