@@ -1,23 +1,25 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import TodoForm from "./TodoForm";
 import { RiCloseCircleLine } from "react-icons/ri";
 import { TiEdit } from "react-icons/ti";
+import EditTodoModal from "./EditTodoModal";
 
 const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
-    const [edit, setEdit] = useState({
-        id: null,
-        value: "",
-    });
+    const [editingTodo, setEditingTodo] = useState(null);
 
-    const submitUpdate = (value) => {
-        updateTodo(edit.id, value);
-        setEdit({ id: null, value: "" });
+    const handleOpenEdit = (todo) => {
+        setEditingTodo(todo);
     };
 
-    if (edit.id) {
-        return <TodoForm edit={edit} onSubmit={submitUpdate} />;
-    }
+    const handleSave = (updatedText) => {
+        if (!editingTodo) return;
+        updateTodo(editingTodo.id, { text: updatedText });
+        setEditingTodo(null);
+    };
+
+    const handleCancel = () => {
+        setEditingTodo(null);
+    };
 
     return (
         <div>
@@ -34,11 +36,27 @@ const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
                         {todo.text}
                     </div>
                     <div className="icons">
-                        <RiCloseCircleLine onClick={() => removeTodo(todo.id)} className="delete-icon" />
-                        <TiEdit onClick={() => setEdit({ id: todo.id, value: todo.text })} className="edit-icon" />
+                        <RiCloseCircleLine
+                            onClick={() => removeTodo(todo.id)}
+                            className="delete-icon"
+                            title="Delete task"
+                        />
+                        <TiEdit
+                            onClick={() => handleOpenEdit(todo)}
+                            className="edit-icon"
+                            title="Edit task"
+                        />
                     </div>
                 </div>
             ))}
+
+            {editingTodo && (
+                <EditTodoModal
+                    todo={editingTodo}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                />
+            )}
         </div>
     );
 };
@@ -51,3 +69,4 @@ Todo.propTypes = {
 };
 
 export default Todo;
+
